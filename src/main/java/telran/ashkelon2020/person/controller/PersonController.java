@@ -1,5 +1,6 @@
 package telran.ashkelon2020.person.controller;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import telran.ashkelon2020.person.dto.AgesDto;
+import telran.ashkelon2020.person.dto.CityPopulationDto;
 import telran.ashkelon2020.person.dto.PersonDto;
 import telran.ashkelon2020.person.dto.PersonUpdateDto;
+import telran.ashkelon2020.person.dto.SalariesDto;
 import telran.ashkelon2020.person.service.PersonService;
 
 @RestController
@@ -22,13 +25,17 @@ public class PersonController {
 	@Autowired
 	PersonService personService;
 	
+	@Autowired
+	ModelMapper modelMapper;
+		
 	@PostMapping
 	public boolean addPerson(@RequestBody PersonDto personDto) {
-		return personService.addPerson(personDto);		
+		return personService.addPerson(personDto);
 	}
 	
 	@GetMapping("/{id}")
 	public PersonDto findPersonById(@PathVariable Integer id) {
+		
 		return personService.getPersonById(id);
 	} 
 	
@@ -47,9 +54,29 @@ public class PersonController {
 		return personService.findPersonsByName(name);
 	}
 	
-	@GetMapping("/period")
+	@PostMapping("/age/period")
 	public Iterable<PersonDto> findPersonsByAges(@RequestBody AgesDto agesDto) {
-		return personService.fingPersonsByAges(agesDto.getAgeFrom(), agesDto.getAgeTo());
+		return personService.findPersonsByAges(agesDto.getAgeFrom(), agesDto.getAgeTo());
+	}
+	
+	@GetMapping("/city/{city}")
+	public Iterable<PersonDto> findPersonsByCity(@PathVariable String city) {
+		return personService.findPersonsByCity(city);
+	}
+	
+	@GetMapping("/population/city")
+	public Iterable<CityPopulationDto> getCityPopulation() {
+		return personService.getCityPopulations();
+	}
+	
+	@PostMapping("/employee/salary/range")
+	public Iterable<PersonDto> findEmployeesBySalary(@RequestBody SalariesDto salariesDto){
+		return personService.findEmployeesBySalary(salariesDto.getMin(), salariesDto.getMax());
+	}
+	
+	@GetMapping("/children")
+	public Iterable<PersonDto> getChildren() {
+		return personService.getChildren();
 	}
 	
 }
