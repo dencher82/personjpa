@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import telran.ashkelon2020.person.dto.CityPopulationDto;
+import telran.ashkelon2020.person.model.Child;
+import telran.ashkelon2020.person.model.Employee;
 import telran.ashkelon2020.person.model.Person;
 
 public interface PersonRepository extends JpaRepository<Person, Integer>{
@@ -28,9 +30,11 @@ public interface PersonRepository extends JpaRepository<Person, Integer>{
 	List<CityPopulationDto> getCityPopulation();
 	
 	@Query("select p from Person p where p.salary between ?1 and ?2")
-	Stream<Person> findEmployeesBySalaryBetween(Integer min, Integer max);
+	Stream<Employee> findEmployeesBySalaryBetween(Integer min, Integer max);
 	
-	@Query("select p from Person p where p.kindergarten is not null")
-	Stream<Person> getChildren();
+//	@Query("select p from Person p where p.kindergarten is not null")
+//	Stream<Child> getChildren();
+	
+	Stream<Child> findChildrenBy();
 	
 }
